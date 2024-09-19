@@ -1,56 +1,56 @@
 import React, { useState } from 'react';
 
-const numCordas = 6;
-const numCasas = 25;
+const NUMERO_CORDAS = 6;
+const NUMERO_CASAS = 25;
 
-// Sequência de notas
-const notas = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
+// Sequência de NOTAS
+const NOTAS = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
 
-// Notas das cordas soltas (6ª a 1ª corda)
-const afinacao = ['E', 'A', 'D', 'G', 'B', 'E']; // Afinação padrão de violão
+// NOTAS das cordas soltas (6ª a 1ª corda)
+const AFINACAO = ['E', 'A', 'D', 'G', 'B', 'E']; // Afinação padrão de violão
 
 // Função para calcular a nota da casa com base na corda solta e casa
-const calculateNote = (openStringNote: string, fret: number) => {
-  const openNoteIndex = notas.indexOf(openStringNote);
-  const noteIndex = (openNoteIndex + fret) % notas.length;
-  return notas[noteIndex];
+const calculaNota = (notaAfinacao: string, traste: number) => {
+  const opennotaIndex = NOTAS.indexOf(notaAfinacao);
+  const notaIndex = (opennotaIndex + traste) % NOTAS.length;
+  return NOTAS[notaIndex];
 };
 
 const App: React.FC = () => {
-  const [selectedFrets, setSelectedFrets] = useState<number[]>(Array(numCordas).fill(null));
+  const [selectedtrastes, setSelectedtrastes] = useState<number[]>(Array(NUMERO_CORDAS).fill(null));
 
-  const handleCheckboxChange = (stringIndex: number, fret: number) => {
-    const newSelectedFrets = [...selectedFrets];
+  const handleCheckboxChange = (stringIndex: number, traste: number) => {
+    const newSelectedtrastes = [...selectedtrastes];
     
-    if (newSelectedFrets[stringIndex] === fret) {
-      newSelectedFrets[stringIndex] = null;
+    if (newSelectedtrastes[stringIndex] === traste) {
+      newSelectedtrastes[stringIndex] = null;
     } else {
-      newSelectedFrets[stringIndex] = fret;
+      newSelectedtrastes[stringIndex] = traste;
     }
 
-    setSelectedFrets(newSelectedFrets);
+    setSelectedtrastes(newSelectedtrastes);
   };
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', gap: '50px'}}>
       <h1>Guitar Chord Finder</h1>
       {/* Loop para gerar as cordas */}
-      {Array.from({ length: numCordas}, (_, stringIndex) => (
+      {Array.from({ length: NUMERO_CORDAS}, (_, stringIndex) => (
         <div key={stringIndex} style={{display: 'flex', flexDirection: 'row'}}>
-          <label>{stringIndex + 1}st String ({afinacao[stringIndex]}):</label>
+          <label>{stringIndex + 1}st String ({AFINACAO[stringIndex]}):</label>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'nowrap' }}>
-            {/* Loop para gerar as casas (frets) */}
-            {Array.from({ length: numCasas }, (_, fret) => {
-              const nota = calculateNote(notas[stringIndex], fret);
+            {/* Loop para gerar as casas (trastes) */}
+            {Array.from({ length: NUMERO_CASAS }, (_, traste) => {
+              const nota = calculaNota(AFINACAO[stringIndex], traste); // Corrigido aqui
               return (
-                <label key={fret}>
+                <label key={traste}>
                   <input
                     type="checkbox"
-                    value={fret}
-                    checked={selectedFrets[stringIndex] === fret}
-                    onChange={() => handleCheckboxChange(stringIndex, fret)}
+                    value={traste}
+                    checked={selectedtrastes[stringIndex] === traste}
+                    onChange={() => handleCheckboxChange(stringIndex, traste)}
                   />
-                  {fret === 0 ? 'Open' : `${fret}th Fret (${nota})`}
+                  {traste === 0 ? 'tt' : `${traste}th traste (${nota})`}
                 </label>
               );
             })}
